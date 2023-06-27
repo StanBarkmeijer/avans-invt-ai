@@ -55,12 +55,19 @@ def predict_digit(img):
     return results
 
 for i in range(len(files)):
+    accuracy = 0
+
     img = Image.open(files[i])
     results = predict_digit(img)
     print("File: " + files[i])
     print("Actual: " + str(values[i]))
+
+    print("")
     
     for j in range(len(results)):
         print("Model " + str(models[j]) + ": " + str(results[j]))
+        if results[j] == values[i]:
+            accuracy += 1
 
+    print("Accuracy: " + str((accuracy / len(results) * 100)) + "%")
     print("")
