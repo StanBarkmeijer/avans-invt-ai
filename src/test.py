@@ -1,6 +1,7 @@
 from keras.models import load_model
 from PIL import Image
 import numpy as np
+import cv2
 
 files = [
     "num_0.png",
@@ -41,11 +42,6 @@ for i in range(len(models)):
     actual_models.append(load_model(models[i]))
 
 def predict_digit(img):
-    img = img.resize((28, 28))
-    img = img.convert('L')
-    img = np.array(img)
-    img = img.reshape(1, 28, 28, 1)
-    img = img / 255.0
     results = []
 
     for i in range(len(actual_models)):
@@ -57,8 +53,12 @@ def predict_digit(img):
 for i in range(len(files)):
     accuracy = 0
 
-    img = Image.open(files[i])
-    results = predict_digit(img)
+    image = cv2.imread(files[i], cv2.IMREAD_GRAYSCALE)
+    image = cv2.resize(image, (28, 28))
+    image = image.reshape(1, 28, 28, 1)
+    image = image.astype('float32') / 255
+
+    results = predict_digit(image)
     print("File: " + files[i])
     print("Actual: " + str(values[i]))
 
